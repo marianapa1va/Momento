@@ -58,10 +58,7 @@ db.funcionarios.aggregate([
  
   ```js
 
-db.funcionarios.aggregate([
-  { $group: {
-      _id: null, 
-      mediaSalarial: { $avg: { $toDouble: "$salario" } } } }]);
+db.funcionarios.aggregate([{ $group: { _id: null, mediaSalarial: { $avg: { $toDouble: "$salario" } } } }]);
 
 ```
  
@@ -161,19 +158,7 @@ db.funcionarios.countDocuments({ "dependentes.conjuge": { $exists: true }})
  
   ```js
 
-db.funcionarios.aggregate([
-    {
-        $match: {
-            cargo: { $ne: "CEO" } 
-        }
-    },
-    {
-        $group: {
-            _id: null, 
-            mediaSalarial: { $avg: "$salario" }
-        }
-    }
-]);
+db.funcionarios.aggregate([{ $match: {cargo: { $ne: "CEO" }}},{$group: {_id: null, mediaSalarial: { $avg: "$salario" }}}]);
 
 ```
 
@@ -195,18 +180,8 @@ db.funcionarios.aggregate([
 R: Departamento executivo, com uma média salarial avaliada em torno de 71000.
 
   ```js
-db.funcionarios.aggregate([{
-        $group: {
-            _id: "$departamento",
-            mediaSalarial: { $avg: "$salario" }
-        }
-    },
-    {
-        $sort: { mediaSalarial: -1 }
-    },
-    {
-        $limit: 1
-    }])
+
+db.funcionarios.aggregate([{ $group: {_id: "$departamento", mediaSalarial: { $avg: "$salario" }}},{$sort: { mediaSalarial: -1 }},{ $limit: 1}])
 
 ```
 
@@ -223,16 +198,7 @@ R: O departamento executivo possui apenas um funcionário.
  
   ```js
 
-db.funcionarios.aggregate([{
-    $group: {
-      _id: "$departamento", 
-      totalFuncionarios: { $sum: 1 } 
-    }},
-  {
-    $sort: { totalFuncionarios: 1 } 
-  },
-  {
-    $limit: 1 }])
+db.funcionarios.aggregate([{$group: {_id: "$departamento", totalFuncionarios: { $sum: 1 }}}, {$sort: { totalFuncionarios: 1 }},{ $limit: 1 }])
 
 ```
  
