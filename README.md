@@ -178,25 +178,107 @@ db.funcionarios.aggregate([
 ```
 
  Qual a média salarial do departamento de tecnologia? 
+
+ R: A média salarial é de 25.300
+
+ //Usei esse comando apenas para trazer todos os funcionários que fazem parte do departamento de tecnologia.
  
   ```js
 
+{ departamento : ObjectId('85992103f9b3e0b3b3c1fe74') }
+
 ```
+//Para calcular a média, resolvi manualmente.
+
  Qual o departamento com a maior média salarial?
+ 
+R: Departamento executivo, com uma média salarial avaliada em torno de 71000.
+
   ```js
+db.funcionarios.aggregate([{
+        $group: {
+            _id: "$departamento",
+            mediaSalarial: { $avg: "$salario" }
+        }
+    },
+    {
+        $sort: { mediaSalarial: -1 }
+    },
+    {
+        $limit: 1
+    }])
+
 ```
+
+\\ Usei esse comando apenas para ganhar uma resposta mais precisa
+ ```js
+
+{_id: ObjectId('85992103f9b3e0b3b3c1fe70')}
+
+```
+
  Qual o departamento com o menor número de funcionários?
+
+R: O departamento executivo possui apenas um funcionário.
+ 
   ```js
+
+db.funcionarios.aggregate([{
+    $group: {
+      _id: "$departamento", 
+      totalFuncionarios: { $sum: 1 } 
+    }},
+  {
+    $sort: { totalFuncionarios: 1 } 
+  },
+  {
+    $limit: 1 }])
+
 ```
  
  Pensando na relação quantidade e valor unitario, qual o produto mais valioso da empresa?
+
+R:  
+
+_id: ObjectId('5f8b3f3f9b3e0b3b3c1e3e51'),
+  produto: 'Sabre de Luz (Mace Windu)',
+  quantidade: 8,
+  precoUnitario: 990.29,
+  dataVenda: '2023-06-15',
+  vendedor: ObjectId('5f8b3f3f9b3e0b3b3c1e3e56')
+ 
    ```js
+db.vendas.aggregate([{ $sort: {quantidade: -1}},{$sort: {precoUnitario: -1}},{ $limit: 1 }])
+
 ```
  
  Qual o produto mais vendido da empresa?
+
+ R: 
+ 
+  id: 'Laço da Verdade',
+  quantidadeTotal: 12,
+  produto: 'Laço da Verdade'
+ 
    ```js
+
+db.vendas.aggregate([{ $group: { _id: "$produto", quantidadeTotal: { $sum: "$quantidade" }}},{$sort: { quantidadeTotal: -1 } 
+  },{ $limit: 1 },{ $project: {  produto: "$_id", quantidadeTotal: 1 }}])
+
 ```
+
  
  Qual o produto menos vendido da empresa?
+ 
+ R:
+ 
+ _id: 'Fake Batarang',
+  quantidadeTotal: 2,
+  produto: 'Fake Batarang'
+ 
    ```js
+
+db.vendas.aggregate([{$group: { _id: "$produto", quantidadeTotal: { $sum: "$quantidade" }}},{ $sort: { quantidadeTotal: 1 } 
+  },{ $limit: 1 },{$project: { produto: "$_id", quantidadeTotal: 1 }}])
+
 ```
