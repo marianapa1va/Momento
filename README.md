@@ -1,5 +1,7 @@
 # Momento
 
+O "Momento" é uma atividade de análise de dados da empresa fictícia Momento, que visa transformar informações em insights valiosos. Através da coleta e organização de dados sobre vendas, clientes e produtos, realizamos análises estatísticas para identificar padrões e tendências.
+
  Quantos funcionarios da empresa Momento trabalham no departamento de vendas?
 
  R: Na empresa Momento, há 10 funcionários. Sendo oito deles na área de consultoria de vendas, um deles com vendas e o ultimo como representante de vendas para a América Latina.
